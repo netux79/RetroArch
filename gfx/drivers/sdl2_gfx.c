@@ -492,9 +492,14 @@ static bool sdl2_gfx_frame(void *data, const void *frame, unsigned width,
 {
    sdl2_video_t *vid = (sdl2_video_t*)data;
    char title[128];
+   static unsigned pw, ph; /* keep track of frame size */
 
-   if (vid->should_resize)
+   if (vid->should_resize || pw != width || ph != height)
+   {
       sdl_refresh_viewport(vid);
+      pw = width;
+      ph = height;
+   }
 
    if (frame && video_info->libretro_running)
    {

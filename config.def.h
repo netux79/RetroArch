@@ -217,6 +217,11 @@ static const bool shader_enable = false;
  */
 static const bool scale_integer = false;
 
+/* Only scale in integer steps on height.
+ * If set, Y will be integer scaled only.
+ */
+static const bool scale_int_honly = false;
+
 /* Controls aspect ratio handling. */
 
 /* Automatic */

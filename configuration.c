@@ -1221,6 +1221,7 @@ static struct config_bool_setting *populate_settings_bool(settings_t *settings, 
    SETTING_BOOL("video_windowed_fullscreen",     &settings->bools.video_windowed_fullscreen, true, windowed_fullscreen, false);
    SETTING_BOOL("video_crop_overscan",           &settings->bools.video_crop_overscan, true, crop_overscan, false);
    SETTING_BOOL("video_scale_integer",           &settings->bools.video_scale_integer, true, scale_integer, false);
+   SETTING_BOOL("video_scale_int_honly",         &settings->bools.video_scale_int_honly, true, scale_int_honly, false);
    SETTING_BOOL("video_smooth",                  &settings->bools.video_smooth, true, video_smooth, false);
    SETTING_BOOL("video_force_aspect",            &settings->bools.video_force_aspect, true, force_aspect, false);
    SETTING_BOOL("video_threaded",                video_driver_get_threaded(), true, video_threaded, false);

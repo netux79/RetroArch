@@ -80,6 +80,7 @@ typedef struct settings
       bool video_crop_overscan;
       bool video_aspect_ratio_auto;
       bool video_scale_integer;
+      bool video_scale_int_honly;
       bool video_shader_enable;
       bool video_shader_watch_files;
       bool video_threaded;

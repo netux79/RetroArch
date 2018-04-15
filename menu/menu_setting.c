@@ -1680,27 +1680,6 @@ void general_write_handler(void *data)
       case MENU_ENUM_LABEL_INPUT_POLL_TYPE_BEHAVIOR:
          core_set_poll_type((unsigned int*)setting->value.target.integer);
          break;
-      case MENU_ENUM_LABEL_VIDEO_SCALE_INTEGER:
-         {
-            video_viewport_t vp;
-            struct retro_system_av_info *av_info = video_viewport_get_system_av_info();
-            video_viewport_t            *custom  = video_viewport_get_custom();
-            struct retro_game_geometry     *geom = (struct retro_game_geometry*)
-               &av_info->geometry;
-
-            video_driver_get_viewport_info(&vp);
-
-            if (*setting->value.target.boolean)
-            {
-               custom->x      = 0;
-               custom->y      = 0;
-               custom->width  = ((custom->width + geom->base_width   - 1) / geom->base_width)  * geom->base_width;
-               custom->height = ((custom->height + geom->base_height - 1) / geom->base_height) * geom->base_height;
-               aspectratio_lut[ASPECT_RATIO_CUSTOM].value =
-                  (float)custom->width / custom->height;
-            }
-         }
-         break;
       case MENU_ENUM_LABEL_HELP:
          if (*setting->value.target.boolean)
          {
@@ -3688,6 +3667,25 @@ static bool setting_append_list(
                   MENU_ENUM_LABEL_VIDEO_SCALE_INTEGER,
                   MENU_ENUM_LABEL_VALUE_VIDEO_SCALE_INTEGER,
                   scale_integer,
+                  MENU_ENUM_LABEL_VALUE_OFF,
+                  MENU_ENUM_LABEL_VALUE_ON,
+                  &group_info,
+                  &subgroup_info,
+                  parent_group,
+                  general_write_handler,
+                  general_read_handler,
+                  SD_FLAG_NONE);
+            menu_settings_list_current_add_cmd(
+                  list,
+                  list_info,
+                  CMD_EVENT_VIDEO_APPLY_STATE_CHANGES);
+                  
+            CONFIG_BOOL(
+                  list, list_info,
+                  &settings->bools.video_scale_int_honly,
+                  MENU_ENUM_LABEL_VIDEO_SCALE_INT_HONLY,
+                  MENU_ENUM_LABEL_VALUE_VIDEO_SCALE_INT_HONLY,
+                  scale_int_honly,
                   MENU_ENUM_LABEL_VALUE_OFF,
                   MENU_ENUM_LABEL_VALUE_ON,
                   &group_info,

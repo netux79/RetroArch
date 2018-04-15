@@ -2260,7 +2260,10 @@ void video_viewport_get_scaled_integer(struct video_viewport *vp,
 {
    int padding_x        = 0;
    int padding_y        = 0;
-   settings_t *settings = config_get_ptr();
+   settings_t *settings = config_get_ptr();   
+   /* Use frame cache size so we ensure we get the real
+    * size being displayed */
+   unsigned base_height = frame_cache_height ? frame_cache_height : 1;
 
    if (settings->uints.video_aspect_ratio_idx == ASPECT_RATIO_CUSTOM)
    {
@@ -2269,21 +2272,20 @@ void video_viewport_get_scaled_integer(struct video_viewport *vp,
       if (custom)
       {
          padding_x = width - custom->width;
-         padding_y = height - custom->height;
          width     = custom->width;
-         height    = custom->height;
+         
+         unsigned scaled_height = custom->height;
+         
+         if (settings->bools.video_scale_int_honly)
+            scaled_height = (custom->height / base_height) * base_height;
+
+         padding_y = height - scaled_height;
+         height    = scaled_height;
       }
    }
    else
    {
       unsigned base_width;
-      /* Use system reported sizes as these define the
-       * geometry for the "normal" case. */
-      unsigned base_height                 = video_driver_av_info.geometry.base_height;
-
-      if (base_height == 0)
-         base_height = 1;
-
       /* Account for non-square pixels.
        * This is sort of contradictory with the goal of integer scale,
        * but it is desirable in some cases.

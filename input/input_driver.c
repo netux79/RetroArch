@@ -393,6 +393,10 @@ static unsigned input_driver_max_users            = 0;
 static const void *hid_data                       = NULL;
 #endif
 
+/* number of frames required to trigger the hotkey */
+#define HOTKEY_DELAY 5
+static unsigned hotkey_counter = 0;
+
 /**
  * check_input_driver_block_hotkey:
  *
@@ -1087,9 +1091,16 @@ void input_keys_pressed(void *data, retro_bits_t* p_new_state)
             && current_input->input_state(
                current_input_data, joypad_info, &binds, 0,
                RETRO_DEVICE_JOYPAD, 0, RARCH_ENABLE_HOTKEY))
-         input_driver_block_libretro_input = true;
-      else
-         input_driver_block_hotkey         = true;
+      {
+         if (hotkey_counter < HOTKEY_DELAY)
+            hotkey_counter++;
+         if (hotkey_counter == HOTKEY_DELAY)
+             input_driver_block_libretro_input = true;
+      }
+      else {
+         hotkey_counter = 0;
+         input_driver_block_hotkey = true;
+      }
    }
 
    game_focus_toggle_valid                      = binds[RARCH_GAME_FOCUS_TOGGLE].valid;

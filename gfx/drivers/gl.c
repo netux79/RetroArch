@@ -972,6 +972,7 @@ static bool gl_frame(void *data, const void *frame,
    gl_t                            *gl = (gl_t*)data;
    unsigned width                      = video_info->width;
    unsigned height                     = video_info->height;
+   static unsigned pw, ph; /* keep track of frame size */
 
    if (!gl)
       return false;
@@ -1001,7 +1002,7 @@ static bool gl_frame(void *data, const void *frame,
                video_info);
    }
 
-   if (gl->should_resize)
+   if (gl->should_resize || pw != frame_width || ph != frame_height)
    {
       gfx_ctx_mode_t mode;
 
@@ -1026,7 +1027,11 @@ static bool gl_frame(void *data, const void *frame,
                   video_info);
       }
       else
+      {
          gl_set_viewport(gl, video_info, width, height, false, true);
+         pw = frame_width;
+         ph = frame_height;
+      }
    }
 
    if (frame)
