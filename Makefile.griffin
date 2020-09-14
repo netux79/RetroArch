@@ -96,7 +96,7 @@ else ifeq ($(platform), ps3-cobra)
 
 # NGC/Wii - libogc
 else ifeq ($(libogc_platform), 1)
-   EXTERNAL_LIBOGC=0
+   EXTERNAL_LIBOGC=1
    CC = $(DEVKITPPC)/bin/powerpc-eabi-gcc$(EXE_EXT)
    CXX = $(DEVKITPPC)/bin/powerpc-eabi-g++$(EXE_EXT)
    LD = $(DEVKITPPC)/bin/powerpc-eabi-ld$(EXE_EXT)
@@ -151,11 +151,11 @@ else ifeq ($(libogc_platform), 1)
       endif
    endif
 
-   LIBS += -logc
-
    ifeq ($(EXTERNAL_LIBOGC), 1)
       LIBS += -lfat
    endif
+
+   LIBS += -logc
 
    ifeq ($(platform), wii)
       LIBS += -lwiiuse -lbte
